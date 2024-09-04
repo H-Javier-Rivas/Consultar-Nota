@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Notas</title>
+    <link rel="stylesheet" href="style.css">
+
+<!--/////////////////////////////////////////////////////////////////-->
+    <style type="text/css">
+
+body {
+    font-family: sans-serif;
+    text-align: center;
+}
+
+#contenedor-formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#cedula {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#contenedor-resultado {
+    display: none;
+}
+
+#nota {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#error {
+    color: red;
+    margin-top: 10px;
+}
+
+    </style>
+</head>
+
+<!--/////////////////////////////////////////////////////////////////-->
+<body>
+    <h1>Consulta de Notas</h1>
+
+    <div id="contenedor-formulario">
+        <label for="cedula">Cédula:</label>
+        <input type="number" id="cedula" name="cedula" required>
+        <button onclick="verNota()">Ver Nota</button>
+    </div>
+
+    <div id="contenedor-resultado">
+        <p id="E1"></p>
+	<p id="E2"></p>
+        <p id="E3"></p>
+	<p id="E4"></p>
+        <p id="E5"></p>
+	<p id="NF"></p>
+        <p id="error"></p>
+    </div>
+
+<!--/////////////////////////////////////////////////////////////////-->
+    <script>
+const notas = {
+"33937685": [3, 5, 6, 8, 9, 6.2],
+"30497965": [0, 5, 4, 0, 7, 3.2],
+"31882076": [0, 9, 6, 8.5, 7, 6.1],
+"32085930": [4, 5, 5, 8, 9, 6.2],
+"31461783": [6, 5, 5, 0, 5, 4.2],
+"30943280": [6, 5, 6, 8, 7, 6.4],
+"31954054": [5.2, 9, 10, 8.5, 9, 8.3],
+"31959367": [3, 9, 10, 6, 9, 7.4],
+"31598142": [1, 4, 8, 0, 6, 3.8],
+"32226185": [8, 6, 3, 6, 7, 6],
+"32635693": [5.6, 5, 9, 6, 10, 7.1],
+"32004641": [5.6, 2, 10, 6, 9, 6.5],
+"32341263": [1, 4, 6, 8, 9, 5.6],
+"30656889": [6, 5, 6, 6, 8, 6.2],
+"30994129": [3, 5, 8, 6, 7, 5.8],
+"30857907": [2, 0, 7, 8.5, 5, 4.5],
+"31058797": [5, 6, 6, 0, 8, 5],
+"32417159": [1, 6, 6, 0, 8, 4.2],
+"33338869": [1, 0, 4, 0, 10, 3],
+"31159491": [0, 0, 0, 0, 7, 1.4],
+"32197104": [1, 0, 5, 0, 0, 1.2],
+"31615610": [8, 4, 6, 5, 10, 6.6],
+"30830832": [3.5, 4, 8, 8, 9, 6.5],
+"32172350": [10, 6, 10, 8, 9, 8.6],
+"31275150": [1, 6, 10, 5, 9, 6.2],
+"31783171": [10, 6, 5, 8, 7, 7.2],
+"31435595": [0, 7, 3, 0, 0, 2],
+"31430454": [4.5, 0, 0, 0, 0, 0.9],
+"31317964": [7.2, 0, 5, 0, 9, 4.2],
+"33088264": [3, 0, 0, 0, 0, 0.6],
+"31485264": [5.8, 6, 5, 4, 9, 6],
+"31783018": [2, 3, 6, 6.5, 10, 5.5],
+"31430647": [1, 5, 7, 6, 9, 5.6],
+"32059981": [4.5, 5, 0, 0, 0, 1.9],
+"29765730": [4, 0, 0, 0, 6, 2],
+"33067528": [6.5, 5, 10, 6, 9, 7.3],
+"32961317": [6, 0, 10, 8, 9, 6.6],
+"30576956": [5.2, 8, 5, 0, 7, 5],
+"31963495": [10, 7.5, 9, 6.5, 10, 8.6],
+"31317995": [6, 6, 5, 8.5, 9, 6.9],
+"28459700": [1.9, 8, 6, 6, 7, 5.8],
+"32059616": [6, 2, 8, 8, 10, 6.8],
+"31445333": [7.2, 2, 5, 8, 9, 6.2],
+"32506700": [9.2, 0, 1, 0, 0, 2],
+"32506297": [6, 8, 7, 6, 9, 7.2],
+"33067753": [7.4, 1, 6, 0, 7, 4.3],
+"32099033": [8.2, 5, 9, 6.5, 8, 7.3],
+"32085799": [8, 0, 7, 6, 8, 5.8],
+"32748391": [3.4, 0, 0, 5, 0, 1.7],
+"30746585": [5, 1, 4, 0, 0, 2],
+"28751618": [7.7, 5, 7, 6, 9, 6.9],
+"32617989": [8, 6, 8, 8.5, 9, 7.9],
+"30820333": [0, 1, 8, 4, 6, 3.8],
+"30292753": [4.6, 6, 7, 5, 9, 6.3],
+"31103386": [4.5, 0, 4, 0, 8, 3.3],
+"31384684": [0.9, 0, 6, 8, 5, 4],
+"31275625": [6, 0, 4, 0, 5, 3.1],
+"32225817": [3.3, 5, 5, 5, 9, 5.5],
+"30298926": [8, 3, 4, 4, 9, 5.6],
+"30040345": [3, 0, 4, 0, 0, 1.4],
+"31839648": [0.1, 0, 0, 0, 0, 0],
+"26500079": [4, 5, 6, 8, 5, 5.6],
+"31981445": [7, 6, 9, 6.5, 8, 7.3],
+"31782994": [6, 6, 8, 6, 9, 7],
+"27296134": [5, 4, 6, 5, 9, 5.8],
+"31730510": [1, 0, 6, 0, 8, 2.8],
+"31175551": [7.5, 5, 6, 0, 0, 3.7],
+"30857267": [6, 3, 4, 6.5, 8, 5.5],
+"31318692": [3.6, 5, 4, 8, 9, 5.9],
+"31207034": [4.5, 0, 9, 6, 9, 5.7],
+"28215642": [6.8, 0, 4, 0, 0, 2.2],
+"30119647": [0, 0, 0, 0, 0, 0],
+"31103097": [5, 1, 6, 5, 7, 4.8],
+"33225759": [6, 4, 8, 8.5, 9, 7.1],
+"33026537": [5.4, 5, 5, 4, 9, 5.7],
+"28272759": [2.1, 0, 5, 0, 7, 2.8],
+"30994525": [5, 1, 9, 6.5, 8, 5.9],
+"27334226": [1, 8, 7, 6, 6, 5.6],
+"31074577": [6, 6, 6, 6, 5, 5.8],
+"32417227": [6.5, 6, 6, 6, 9, 6.7],
+"31933516": [3.5, 0, 4, 0, 0, 1.5],
+"29643341": [4, 1, 0, 6, 9, 4],
+"30810726": [1.5, 0, 0, 0, 0, 0.3],
+"30736408": [4.4, 0, 0, 0, 0, 0.9],
+
+    // ... agregar más notas y cédulas
+};
+
+function mostrarResultado(nota, error) {
+    const contenedorResultado = document.getElementById("contenedor-resultado");
+    const E1Element = document.getElementById("E1");
+    const E2Element = document.getElementById("E2");
+    const E3Element = document.getElementById("E3");
+    const E4Element = document.getElementById("E4");
+    const E5Element = document.getElementById("E5");
+    const NFElement = document.getElementById("NF");
+    const errorElement = document.getElementById("error");
+
+    contenedorResultado.style.display = "block";
+
+    if (error) {
+        E1Element.textContent = "";
+        E2Element.textContent = "";
+        E3Element.textContent = "";
+        E4Element.textContent = "";
+        E5Element.textContent = "";
+        NFElement.textContent = "";
+        errorElement.textContent = error;
+    } else {
+        E1Element.textContent = 'Tema 1 =' + nota[0];
+        E2Element.textContent = 'Tema 2 =' + nota[1];
+        E3Element.textContent = 'Tema 3 =' + nota[2];
+        E4Element.textContent = 'Tema 4 =' + nota[3];
+        E5Element.textContent = 'Tema 5 =' + nota[4];
+        NFElement.textContent = 'Acumulado: ' + nota[5];
+        errorElement.textContent = "";
+    }
+}
+
+function verNota() {
+    const cedula = parseInt(document.getElementById("cedula").value);
+
+    if (isNaN(cedula)) {
+        mostrarResultado(null, "Ingrese una cédula válida");
+        return;
+    }
+
+    if (notas.hasOwnProperty(cedula)) {
+        mostrarResultado(notas[cedula], null);
+    } else {
+        mostrarResultado(null, "Cédula no encontrada");
+    }
+}
+
+    </script>
+</body>
+</html>
